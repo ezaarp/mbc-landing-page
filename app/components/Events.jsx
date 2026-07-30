@@ -25,9 +25,10 @@ const BARCODE = [3, 1, 2, 4, 1, 2, 1, 3, 1, 4, 2, 1, 3, 1, 2, 4, 1, 1, 3, 2, 1, 
 export default function Events() {
   const shouldReduce = useReducedMotion()
   const all = getAll('events')
-  const recruit = all.find((e) => e.status === 'upcoming') ?? all[0]
+  const recruit = all.find((e) => e.tag === 'Recruitment') ?? all[0]
   if (!recruit) return null
 
+  const isClosed = recruit.status === 'closed'
   const when = formatDate(recruit.date) || 'To be announced'
   const where = recruit.location || 'Telkom University, Bandung'
   const portal = recruit.links?.portal
@@ -55,35 +56,54 @@ export default function Events() {
           {/* ── main ticket ─────────────────────────────────── */}
           <div className="flex-1 p-8 sm:p-12 lg:p-14">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/80">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-red" />
-              {recruit.tag ?? 'Recruitment'} · Applications open
+              <span className={`h-1.5 w-1.5 rounded-full ${isClosed ? 'bg-white/35' : 'animate-pulse bg-brand-red'}`} />
+              {recruit.tag ?? 'Recruitment'} · {isClosed ? 'Applications closed' : 'Applications open'}
             </span>
 
             <h2
               className="mt-6 font-display font-extrabold uppercase leading-[0.95] tracking-tight"
               style={{ fontSize: 'clamp(2.4rem, 4.6vw, 4rem)' }}
             >
-              Apply to <span className="text-brand">MBC Lab</span>,<br />
-              2026/2027.
+              {isClosed ? (
+                <>
+                  Recruitment is <span className="text-brand">closed</span>.<br />
+                  See you next year.
+                </>
+              ) : (
+                <>
+                  Apply to <span className="text-brand">MBC Lab</span>,<br />
+                  2026/2027.
+                </>
+              )}
             </h2>
 
             <p className="mt-6 max-w-md font-body text-base leading-relaxed text-white/70">
-              We open recruitment once a year for new assistants across all five divisions.
-              Bring curiosity; leave with shipped work, a network, and a credential.
+              {isClosed
+                ? 'Thank you for your interest in MBC Lab. We open recruitment once a year — we hope to see you in the next cycle.'
+                : 'We open recruitment once a year for new assistants across all five divisions. Bring curiosity; leave with shipped work, a network, and a credential.'}
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href={portal ?? `mailto:${CONTACT_EMAIL}?subject=MBC%20Lab%20Recruitment%202026/2027`}
-                {...(portal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-mono text-xs uppercase tracking-[0.16em] text-[#0B0E16] transition-transform duration-200 hover:scale-[1.03]"
-              >
-                {portal ? 'Apply now' : 'Ask about recruitment'}
-                <ArrowUpRight
-                  size={15}
-                  className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </a>
+              {isClosed ? (
+                <span
+                  aria-disabled="true"
+                  className="inline-flex cursor-not-allowed items-center gap-2 rounded-full bg-white/15 px-6 py-3 font-mono text-xs uppercase tracking-[0.16em] text-white/45"
+                >
+                  Applications closed
+                </span>
+              ) : (
+                <a
+                  href={portal ?? `mailto:${CONTACT_EMAIL}?subject=MBC%20Lab%20Recruitment%202026/2027`}
+                  {...(portal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-mono text-xs uppercase tracking-[0.16em] text-[#0B0E16] transition-transform duration-200 hover:scale-[1.03]"
+                >
+                  {portal ? 'Apply now' : 'Ask about recruitment'}
+                  <ArrowUpRight
+                    size={15}
+                    className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </a>
+              )}
               <div className="flex items-center gap-5 rounded-full border border-white/15 px-5 py-3 font-mono text-[11px] text-white/70">
                 <span>
                   <span className="text-white/40">When </span>
@@ -98,12 +118,18 @@ export default function Events() {
             </div>
 
             <div className="mt-5">
-              <Link
-                to={`/events/${recruit.slug}`}
-                className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/70 underline-offset-4 hover:text-white hover:underline"
-              >
-                See details →
-              </Link>
+              {isClosed ? (
+                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">
+                  Recruitment details archived
+                </span>
+              ) : (
+                <Link
+                  to={`/events/${recruit.slug}`}
+                  className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/70 underline-offset-4 hover:text-white hover:underline"
+                >
+                  See details →
+                </Link>
+              )}
             </div>
           </div>
 

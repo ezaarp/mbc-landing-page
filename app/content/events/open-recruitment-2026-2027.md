@@ -2,16 +2,16 @@
 title: "Open Recruitment MBC Lab 2026/2027"
 date: "2026-06-24"
 location: "Telkom University, Bandung"
-status: "upcoming"
-summary: "Lab assistant open recruitment for the 2026/2027 term — registration 24–30 June 2026."
+tag: "Recruitment"
+status: "closed"
+summary: "Recruitment for the 2026/2027 term has closed. See you next year!"
 images:
   - "/images/events/mbc-poster.jpg"
 order: 1
-links: { portal: "https://recruitment.mbclaboratory.com" }
 ---
-MBC Lab is opening recruitment for new lab assistants for the 2026/2027 term. **#WeAttack #WeProtect**
+Recruitment for new MBC Lab assistants for the 2026/2027 term has closed. Thank you for your interest — **see you next year!**
 
-Register through the official portal: **[recruitment.mbclaboratory.com](https://recruitment.mbclaboratory.com)**.
+The recruitment portal is no longer accepting applications.
 
 ## Registration period
 

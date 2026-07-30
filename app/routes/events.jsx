@@ -31,11 +31,32 @@ export default function Events() {
       </h1>
       <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((e) => (
-          <Link
-            key={e.slug}
-            to={`/events/${e.slug}`}
-            className="group flex flex-col rounded-lg border border-[var(--line)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--ink-3)]"
-          >
+          e.status === "closed" ? (
+            <div
+              key={e.slug}
+              aria-disabled="true"
+              className="flex cursor-not-allowed flex-col rounded-lg border border-[var(--line)] bg-[var(--surface)] p-5 opacity-70"
+            >
+              <EventCardContent event={e} />
+            </div>
+          ) : (
+            <Link
+              key={e.slug}
+              to={`/events/${e.slug}`}
+              className="group flex flex-col rounded-lg border border-[var(--line)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--ink-3)]"
+            >
+              <EventCardContent event={e} />
+            </Link>
+          )
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function EventCardContent({ event: e }) {
+  return (
+    <>
             {e.images?.[0] && (
               <img src={e.images[0]} alt={e.title} loading="lazy" className="mb-4 aspect-[16/10] w-full rounded-md object-cover" />
             )}
@@ -58,9 +79,11 @@ export default function Events() {
               <p className="mt-1 font-mono text-[11px] text-[var(--ink-3)]">{e.location}</p>
             )}
             <p className="mt-2 flex-1 font-body text-sm leading-relaxed text-[var(--ink-2)]">{e.summary}</p>
-          </Link>
-        ))}
-      </div>
-    </section>
+            {e.status === "closed" && (
+              <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink-3)]">
+                Recruitment closed · See you next year
+              </p>
+            )}
+    </>
   );
 }

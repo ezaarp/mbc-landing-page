@@ -83,8 +83,8 @@ Stats: 51 assistants · 8 HKI works · 3 papers · 5 divisions.
 | Practicum | 12 | 0 |
 | **Total** | **51** | **8** |
 
-### Upcoming Events
-Currently: **Open Recruitment MBC Lab 2026/2027** — date/location/description TBD.
+### Events
+Currently: **Open Recruitment MBC Lab 2026/2027** — closed. See you next year.
 
 ### Achievements
 **Projects (8 HKI):** Hiring The Rookie, Cisandung, Sojurn X Divide, Cycle Chess, Big Data ML Toolkit, WebGIS Pariwisata Bandung, WebGIS Pariwisata Jakarta, Belajar Bareng Edisi 8.

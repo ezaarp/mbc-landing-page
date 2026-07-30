@@ -1,4 +1,5 @@
 import { divisions } from '../data/divisions'
+import { getAll } from '../lib/content'
 
 const CONTACT_EMAIL = 'contact@mbclaboratory.com'
 
@@ -9,6 +10,10 @@ const EXPLORE = [
   ['Work', '/#work'],
   ['Recruitment', '/#recruit'],
 ]
+
+const recruitmentClosed = getAll('events').some(
+  (event) => event.tag === 'Recruitment' && event.status === 'closed',
+)
 
 export default function Footer() {
   return (
@@ -53,12 +58,18 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {EXPLORE.map(([label, href]) => (
                 <li key={href}>
-                  <a
-                    href={href}
-                    className="font-body text-sm text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]"
-                  >
-                    {label}
-                  </a>
+                  {label === 'Recruitment' && recruitmentClosed ? (
+                    <span aria-disabled="true" className="cursor-not-allowed font-body text-sm text-[var(--ink-3)]">
+                      Recruitment closed
+                    </span>
+                  ) : (
+                    <a
+                      href={href}
+                      className="font-body text-sm text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]"
+                    >
+                      {label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

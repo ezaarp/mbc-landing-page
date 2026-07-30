@@ -4,6 +4,11 @@ import * as Icons from 'lucide-react'
 import { ArrowUpRight } from 'lucide-react'
 import { divisions } from '../data/divisions'
 import { getDivisionCounts } from '../lib/content'
+import { getAll } from '../lib/content'
+
+const recruitmentClosed = getAll('events').some(
+  (event) => event.tag === 'Recruitment' && event.status === 'closed',
+)
 
 /* Live "signal" motif — an equalizer recoloured per division. */
 function Signal({ color, active }) {
@@ -147,14 +152,14 @@ export default function Divisions() {
           ))}
 
           {/* CTA tile completing the 3×2 grid */}
-          <motion.a
-            href="#recruit"
+          <motion.div
+            aria-disabled={recruitmentClosed ? 'true' : undefined}
             initial={shouldReduce ? false : { opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: divisions.length * 0.08 }}
-            whileHover={shouldReduce ? {} : { y: -6 }}
-            className="group relative flex min-h-[280px] flex-col justify-between overflow-hidden rounded-2xl p-6 text-white"
+            whileHover={recruitmentClosed || shouldReduce ? {} : { y: -6 }}
+            className={`group relative flex min-h-[280px] flex-col justify-between overflow-hidden rounded-2xl p-6 text-white ${recruitmentClosed ? 'cursor-not-allowed opacity-65' : ''}`}
           >
             <div aria-hidden="true" className="absolute inset-0 brand-gradient" />
             <div aria-hidden="true" className="absolute inset-0 bg-black/35 transition-colors duration-300 group-hover:bg-black/20" />
@@ -166,14 +171,16 @@ export default function Divisions() {
                 Find your frontier.
               </h3>
               <span className="mt-4 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em]">
-                Join the lab
-                <ArrowUpRight
-                  size={15}
-                  className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
+                {recruitmentClosed ? 'Recruitment closed · See you next year' : 'Join the lab'}
+                {!recruitmentClosed && (
+                  <ArrowUpRight
+                    size={15}
+                    className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                )}
               </span>
             </div>
-          </motion.a>
+          </motion.div>
         </div>
       </div>
     </section>

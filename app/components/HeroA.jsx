@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
+import { getAll } from '../lib/content'
+
+const recruitmentClosed = getAll('events').some(
+  (event) => event.tag === 'Recruitment' && event.status === 'closed',
+)
 
 const ROWS = [
   { division: 'Cyber Security', members: 43, projects: 12, color: 'text-red-400',    bg: 'rgba(239,68,68,0.06)'   },
@@ -77,12 +82,21 @@ export default function HeroA() {
             >
               Explore <ArrowRight size={14} />
             </a>
-            <a
-              href="mailto:mbc@telkomuniversity.ac.id"
-              className="inline-flex items-center gap-2 px-6 py-2.5 border border-[#1B2C42] text-[#DDE6F0] font-heading font-bold text-sm rounded-lg hover:border-brand-blue/60 hover:text-brand-glow transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand-glow focus-visible:outline-none"
-            >
-              Join Us
-            </a>
+            {recruitmentClosed ? (
+              <span
+                aria-disabled="true"
+                className="inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-[#1B2C42] px-6 py-2.5 font-heading text-sm font-bold text-[#6F8093]"
+              >
+                Recruitment closed
+              </span>
+            ) : (
+              <a
+                href="mailto:mbc@telkomuniversity.ac.id"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#1B2C42] px-6 py-2.5 font-heading text-sm font-bold text-[#DDE6F0] transition-colors duration-200 hover:border-brand-blue/60 hover:text-brand-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-glow"
+              >
+                Join Us
+              </a>
+            )}
           </motion.div>
         </motion.div>
 

@@ -37,6 +37,7 @@ export default function EventDetail() {
   const { item } = useLoaderData();
   const images = item.images ?? [];
   const portal = item.links?.portal;
+  const isClosed = item.status === "closed";
   return (
     <article className="mx-auto max-w-3xl px-6 pb-24 pt-28 lg:px-8">
       <Link to="/events" className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-blue hover:underline">← Events</Link>
@@ -56,7 +57,14 @@ export default function EventDetail() {
       {item.location && <p className="mt-3 font-body text-base leading-relaxed text-[var(--ink-2)]">{item.location}</p>}
       {item.summary && <p className="mt-2 font-body text-lg leading-relaxed text-[var(--ink-2)]">{item.summary}</p>}
 
-      {portal && (
+      {isClosed ? (
+        <span
+          aria-disabled="true"
+          className="mt-6 inline-flex cursor-not-allowed items-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 font-mono text-xs uppercase tracking-[0.16em] text-[var(--ink-3)]"
+        >
+          Recruitment closed · See you next year
+        </span>
+      ) : portal && (
         <a
           href={portal}
           target="_blank"

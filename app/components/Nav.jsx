@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { Link, useLocation } from 'react-router'
+import { getAll } from '../lib/content'
 
 // Anchors navigate to the home page + section; routes use <Link>.
 const LINKS = [
@@ -11,6 +12,10 @@ const LINKS = [
   { to: '/projects', label: 'Projects' },
   { to: '/research', label: 'Research' },
 ]
+
+const recruitmentClosed = getAll('events').some(
+  (event) => event.tag === 'Recruitment' && event.status === 'closed',
+)
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
@@ -85,13 +90,22 @@ export default function Nav() {
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <a
-            href="/#recruit"
-            className="group inline-flex items-center gap-1.5 rounded-full bg-brand-blue px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-white transition-transform duration-200 hover:scale-[1.04] sm:gap-2 sm:px-4 sm:py-2 sm:text-[11px] sm:tracking-[0.16em]"
-          >
-            Join the lab
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-brand-red transition-transform duration-300 group-hover:scale-150" />
-          </a>
+          {recruitmentClosed ? (
+            <span
+              aria-disabled="true"
+              className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full bg-brand-blue/45 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-white/55 sm:gap-2 sm:px-4 sm:py-2 sm:text-[11px] sm:tracking-[0.16em]"
+            >
+              Recruitment closed
+            </span>
+          ) : (
+            <a
+              href="/#recruit"
+              className="group inline-flex items-center gap-1.5 rounded-full bg-brand-blue px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-white transition-transform duration-200 hover:scale-[1.04] sm:gap-2 sm:px-4 sm:py-2 sm:text-[11px] sm:tracking-[0.16em]"
+            >
+              Join the lab
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-brand-red transition-transform duration-300 group-hover:scale-150" />
+            </a>
+          )}
 
           <button
             type="button"
@@ -127,14 +141,23 @@ export default function Nav() {
                   () => setOpen(false),
                 ),
               )}
-              <a
-                href="/#recruit"
-                onClick={() => setOpen(false)}
-                className="mt-3 mb-3 flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-brand-blue px-4 font-mono text-[12px] uppercase tracking-[0.16em] text-white"
-              >
-                Join the lab
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-brand-red" />
-              </a>
+              {recruitmentClosed ? (
+                <span
+                  aria-disabled="true"
+                  className="mt-3 mb-3 flex min-h-[48px] cursor-not-allowed items-center justify-center rounded-full bg-brand-blue/45 px-4 font-mono text-[12px] uppercase tracking-[0.16em] text-white/55"
+                >
+                  Recruitment closed
+                </span>
+              ) : (
+                <a
+                  href="/#recruit"
+                  onClick={() => setOpen(false)}
+                  className="mt-3 mb-3 flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-brand-blue px-4 font-mono text-[12px] uppercase tracking-[0.16em] text-white"
+                >
+                  Join the lab
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-brand-red" />
+                </a>
+              )}
             </div>
           </motion.nav>
         )}
