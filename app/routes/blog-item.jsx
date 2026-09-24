@@ -4,10 +4,11 @@ import { getPublicItemBySlug } from "../lib/content";
 import { pageMeta } from "../lib/seo";
 import Markdown from "../components/Markdown";
 
-export async function loader({ params }) {
+export async function clientLoader({ params }) {
   const item = await getPublicItemBySlug("blogs", params.slug);
   return { item };
 }
+
 
 function formatDate(iso) {
   if (!iso) return "";
