@@ -8,6 +8,7 @@ export async function clientLoader({ params }) {
   const item = await getPublicItemBySlug("blogs", params.slug);
   return { item };
 }
+clientLoader.hydrate = true;
 
 
 function formatDate(iso) {

@@ -16,6 +16,12 @@ export async function loader() {
   return { items };
 }
 
+export async function clientLoader() {
+  const items = await getPublicItems("awards");
+  return { items };
+}
+clientLoader.hydrate = true;
+
 export default function Awards() {
   const { items } = useLoaderData();
 

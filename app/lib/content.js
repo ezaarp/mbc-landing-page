@@ -93,13 +93,8 @@ export async function getPublicItems(group, params = {}) {
     return allItems;
   } catch (err) {
     console.warn(`CMS API unavailable for ${group}:`, err.message);
-    if (isProduction) {
-      // In production, strictly do not fall back to stale legacy markdown files
-      throw err;
-    }
+    return getAll(group);
   }
-  // Offline development fallback only
-  return getAll(group);
 }
 
 /**
@@ -117,10 +112,6 @@ export async function getPublicItemBySlug(group, slug) {
       throw err;
     }
     console.warn(`CMS API unavailable for ${group}/${slug}:`, err.message);
-    if (isProduction) {
-      throw err;
-    }
-    // Offline development fallback only
     const fallback = getBySlug(group, slug);
     if (!fallback) {
       throw new Response("Not Found", { status: 404 });

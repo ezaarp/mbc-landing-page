@@ -17,25 +17,29 @@ export function getApiBaseUrl() {
 export async function apiFetch(path, options = {}) {
   const baseUrl = getApiBaseUrl();
   const url = `${baseUrl}${path}`;
-  const timeoutMs = options.timeoutMs ?? 5000;
+  const timeoutMs = options.timeoutMs ?? 15000;
+  const maxRetries = options.retries ?? 2;
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-  try {
-    const res = await fetch(url, {
-      ...options,
-      signal: controller.signal,
-      headers: {
-        Accept: "application/json",
-        ...(options.headers || {}),
-      },
-    });
-    clearTimeout(timeoutId);
-    return res;
-  } catch (err) {
-    clearTimeout(timeoutId);
-    throw err;
+    try {
+      const res = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+        headers: {
+          Accept: "application/json",
+          ...(options.headers || {}),
+        },
+      });
+      clearTimeout(timeoutId);
+      return res;
+    } catch (err) {
+      clearTimeout(timeoutId);
+      if (attempt === maxRetries) throw err;
+      await new Promise((r) => setTimeout(r, 400 * (attempt + 1)));
+    }
   }
 }
 

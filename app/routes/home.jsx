@@ -15,6 +15,12 @@ export async function loader() {
   return { homeData };
 }
 
+export async function clientLoader() {
+  const homeData = await getPublicHomeData();
+  return { homeData };
+}
+clientLoader.hydrate = true;
+
 export default function Home() {
   const { homeData } = useLoaderData();
 

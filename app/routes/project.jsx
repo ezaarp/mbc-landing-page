@@ -9,6 +9,12 @@ export async function loader({ params }) {
   return { item };
 }
 
+export async function clientLoader({ params }) {
+  const item = await getPublicItemBySlug("projects", params.slug);
+  return { item };
+}
+clientLoader.hydrate = true;
+
 export function meta({ data, location }) {
   if (!data?.item) return [{ title: "Not found · MBC Lab" }];
   const { item } = data;

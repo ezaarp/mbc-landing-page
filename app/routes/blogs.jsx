@@ -16,6 +16,12 @@ export async function loader() {
   return { items };
 }
 
+export async function clientLoader() {
+  const items = await getPublicItems("blogs");
+  return { items };
+}
+clientLoader.hydrate = true;
+
 function formatDate(iso) {
   if (!iso) return "";
   const d = new Date(iso);

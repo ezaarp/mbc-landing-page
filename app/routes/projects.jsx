@@ -18,6 +18,12 @@ export async function loader() {
   return { items };
 }
 
+export async function clientLoader() {
+  const items = await getPublicItems("projects");
+  return { items };
+}
+clientLoader.hydrate = true;
+
 export default function Projects() {
   const { items } = useLoaderData();
   const [active, setActive] = useState(null);
