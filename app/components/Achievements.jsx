@@ -12,14 +12,6 @@ const COLUMNS = [
   { id: 'partnerships', label: 'Partnerships', icon: Handshake, accent: '#13A36B' },
 ]
 
-// Projects, Research, and Awards are markdown-driven; Partnerships stays on achievements.js.
-const COLUMN_DATA = {
-  projects: getAll('projects'),
-  research: getAll('research'),
-  awards: getAll('awards'),
-  partnerships: achievements.partnerships,
-}
-
 function Entry({ children, index }) {
   const shouldReduce = useReducedMotion()
   return (
@@ -91,21 +83,30 @@ function PartnershipEntry({ item, index, accent }) {
 function AwardEntry({ item, index, accent }) {
   return (
     <Entry index={index}>
-      <div className="mb-1 flex items-start justify-between gap-2">
-        <h3 className="font-display text-sm font-bold leading-snug text-[var(--ink)]">{item.title}</h3>
-        <span className="shrink-0 font-mono text-[10px] tnum text-[var(--ink-3)]">{item.year}</span>
-      </div>
-      <p className="mb-1.5 font-mono text-[11px] font-medium" style={{ color: accent }}>{item.award}</p>
-      <p className="font-body text-xs leading-relaxed text-[var(--ink-2)] whitespace-pre-line">{item.members}</p>
+      <Link to={`/awards/${item.slug}`} className="block transition-opacity hover:opacity-80">
+        <div className="mb-1 flex items-start justify-between gap-2">
+          <h3 className="font-display text-sm font-bold leading-snug text-[var(--ink)]">{item.title}</h3>
+          <span className="shrink-0 font-mono text-[10px] tnum text-[var(--ink-3)]">{item.year}</span>
+        </div>
+        <p className="mb-1.5 font-mono text-[11px] font-medium" style={{ color: accent }}>{item.award}</p>
+        <p className="font-body text-xs leading-relaxed text-[var(--ink-2)] whitespace-pre-line">{item.members}</p>
+      </Link>
     </Entry>
   )
 }
 
 const ENTRY_MAP = { projects: ProjectEntry, research: ResearchEntry, awards: AwardEntry, partnerships: PartnershipEntry }
 
-export default function Achievements() {
+export default function Achievements({ projects, research, awards } = {}) {
   const shouldReduce = useReducedMotion()
   const [expandedCols, setExpandedCols] = useState({})
+
+  const columnData = {
+    projects: projects ?? getAll('projects'),
+    research: research ?? getAll('research'),
+    awards: awards ?? getAll('awards'),
+    partnerships: achievements.partnerships,
+  }
 
   const toggleCol = (id) => {
     setExpandedCols((prev) => ({ ...prev, [id]: !prev[id] }))
@@ -136,7 +137,7 @@ export default function Achievements() {
           {COLUMNS.map((col, ci) => {
             const Icon = col.icon
             const EntryComponent = ENTRY_MAP[col.id]
-            const items = COLUMN_DATA[col.id]
+            const items = columnData[col.id]
             const isExpanded = expandedCols[col.id]
             const needsExpansion = items.length > 4
 
@@ -185,14 +186,14 @@ export default function Achievements() {
                   </button>
                 )}
                 
-                {/* Fallback to full page link if they don't need expansion but it's a page */}
-                {!needsExpansion && col.id !== 'partnerships' && col.id !== 'awards' && (
+                {/* Full page link for collections */}
+                {col.id !== 'partnerships' && (
                   <Link
                     to={`/${col.id}`}
                     className="block w-full border-t border-[var(--line)] px-5 py-3 text-left font-mono text-[10px] uppercase tracking-[0.2em] transition-colors hover:bg-[var(--line)] hover:opacity-80"
                     style={{ color: col.accent }}
                   >
-                    View Page →
+                    View All {col.label} →
                   </Link>
                 )}
               </motion.div>

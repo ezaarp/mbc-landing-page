@@ -3,10 +3,6 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { getAll } from '../lib/content'
 
-const recruitmentClosed = getAll('events').some(
-  (event) => event.tag === 'Recruitment' && event.status === 'closed',
-)
-
 const ROWS = [
   { division: 'Cyber Security', members: 43, projects: 12, color: 'text-red-400',    bg: 'rgba(239,68,68,0.06)'   },
   { division: 'Big Data',       members: 38, projects: 18, color: 'text-blue-400',   bg: 'rgba(96,165,250,0.06)'  },
@@ -24,9 +20,12 @@ const item = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 }
 
-export default function HeroA() {
+export default function HeroA({ recruitmentClosed: rcProp } = {}) {
   const shouldReduce = useReducedMotion()
   const [active, setActive] = useState(0)
+  const recruitmentClosed = rcProp ?? getAll('events').some(
+    (event) => event.tag === 'Recruitment' && event.status === 'closed',
+  )
 
   useEffect(() => {
     if (shouldReduce) return

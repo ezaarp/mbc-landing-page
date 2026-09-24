@@ -1,5 +1,5 @@
 import { useLoaderData, Link } from "react-router";
-import { getAll } from "../lib/content";
+import { getPublicItems } from "../lib/content";
 import { pageMeta } from "../lib/seo";
 
 export function meta() {
@@ -11,7 +11,8 @@ export function meta() {
 }
 
 export async function loader() {
-  return { items: getAll("events") };
+  const items = await getPublicItems("events");
+  return { items };
 }
 
 function formatDate(iso) {
@@ -32,13 +33,13 @@ export default function Events() {
       <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((e) => (
           e.status === "closed" ? (
-            <div
+            <Link
               key={e.slug}
-              aria-disabled="true"
-              className="flex cursor-not-allowed flex-col rounded-lg border border-[var(--line)] bg-[var(--surface)] p-5 opacity-70"
+              to={`/events/${e.slug}`}
+              className="flex flex-col rounded-lg border border-[var(--line)] bg-[var(--surface)] p-5 opacity-80 hover:opacity-100 transition-opacity"
             >
               <EventCardContent event={e} />
-            </div>
+            </Link>
           ) : (
             <Link
               key={e.slug}
@@ -57,33 +58,33 @@ export default function Events() {
 function EventCardContent({ event: e }) {
   return (
     <>
-            {e.images?.[0] && (
-              <img src={e.images[0]} alt={e.title} loading="lazy" className="mb-4 aspect-[16/10] w-full rounded-md object-cover" />
-            )}
-            <div className="flex items-center justify-between gap-2">
-              <span className="font-mono text-[11px] text-[var(--ink-3)]">{formatDate(e.date)}</span>
-              <span
-                className={`rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide ${
-                  e.status === "upcoming"
-                    ? "border-brand-blue text-brand-blue"
-                    : "border-[var(--line-2)] text-[var(--ink-3)]"
-                }`}
-              >
-                {e.status}
-              </span>
-            </div>
-            <h3 className="mt-2 font-display text-lg font-bold leading-snug text-[var(--ink)] group-hover:text-brand-blue">
-              {e.title}
-            </h3>
-            {e.location && (
-              <p className="mt-1 font-mono text-[11px] text-[var(--ink-3)]">{e.location}</p>
-            )}
-            <p className="mt-2 flex-1 font-body text-sm leading-relaxed text-[var(--ink-2)]">{e.summary}</p>
-            {e.status === "closed" && (
-              <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink-3)]">
-                Recruitment closed · See you next year
-              </p>
-            )}
+      {e.images?.[0] && (
+        <img src={e.images[0]} alt={e.title} loading="lazy" className="mb-4 aspect-[16/10] w-full rounded-md object-cover" />
+      )}
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-mono text-[11px] text-[var(--ink-3)]">{formatDate(e.date)}</span>
+        <span
+          className={`rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide ${
+            e.status === "upcoming"
+              ? "border-brand-blue text-brand-blue"
+              : "border-[var(--line-2)] text-[var(--ink-3)]"
+          }`}
+        >
+          {e.status}
+        </span>
+      </div>
+      <h3 className="mt-2 font-display text-lg font-bold leading-snug text-[var(--ink)] group-hover:text-brand-blue">
+        {e.title}
+      </h3>
+      {e.location && (
+        <p className="mt-1 font-mono text-[11px] text-[var(--ink-3)]">{e.location}</p>
+      )}
+      <p className="mt-2 flex-1 font-body text-sm leading-relaxed text-[var(--ink-2)]">{e.summary}</p>
+      {e.status === "closed" && (
+        <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink-3)]">
+          Recruitment closed · Archive
+        </p>
+      )}
     </>
   );
 }
