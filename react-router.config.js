@@ -13,22 +13,14 @@ async function localSlugs(group) {
   }
 }
 
-const isSsr = process.env.SSR !== "false";
-
 /** @type {import('@react-router/dev/config').Config} */
 export default {
-  // Configurable SSR mode (defaults to runtime SSR per approved plan; can be set to false for static export)
-  ssr: isSsr,
+  // Cloudflare Pages requires static output (ssr: false) with prerendered HTML
+  ssr: false,
   async prerender() {
-    // Audit F07: In runtime SSR mode, dynamic editorial routes must NOT be prerendered
-    // into static HTML to prevent stale file shadowing over live CMS updates.
-    if (isSsr) {
-      return [];
-    }
-
-    // In static export mode (SSR=false), prerender all discovered routes
     const staticRoutes = ["/", "/projects", "/research", "/events", "/awards", "/blog"];
     let apiRoutes = [];
+
 
     try {
       const controller = new AbortController();
