@@ -1,7 +1,7 @@
 import { readdir } from "node:fs/promises";
 import path from "node:path";
 
-const CMS_API_URL = process.env.CMS_API_URL || "http://localhost:3000";
+const CMS_API_URL = process.env.CMS_API_URL || "https://lablink.mbclaboratory.com";
 
 async function localSlugs(group) {
   try {
