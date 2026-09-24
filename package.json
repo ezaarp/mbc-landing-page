@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "react-router dev",
     "build": "node scripts/generate-sitemap.mjs && react-router build && node scripts/postbuild.mjs",
-    "start": "npx serve build/client",
+    "start": "react-router-serve ./build/server/index.js",
     "lint": "eslint ."
   },
   "dependencies": {
     "@react-router/node": "^7.18.0",
+    "@react-router/serve": "^7.18.0",
     "framer-motion": "^12.40.0",
     "front-matter": "^4.0.2",
     "isbot": "^5",

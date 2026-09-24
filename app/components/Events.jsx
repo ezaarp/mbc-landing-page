@@ -22,10 +22,10 @@ const PERKS = [
 // faux barcode — bar widths in px
 const BARCODE = [3, 1, 2, 4, 1, 2, 1, 3, 1, 4, 2, 1, 3, 1, 2, 4, 1, 1, 3, 2, 1, 4, 2, 1, 3, 1, 2, 1, 4, 2, 1, 3]
 
-export default function Events() {
+export default function Events({ event } = {}) {
   const shouldReduce = useReducedMotion()
   const all = getAll('events')
-  const recruit = all.find((e) => e.tag === 'Recruitment') ?? all[0]
+  const recruit = event ?? (all.find((e) => e.tag === 'Recruitment') ?? all[0])
   if (!recruit) return null
 
   const isClosed = recruit.status === 'closed'

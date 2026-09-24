@@ -31,12 +31,12 @@ function RosterRow({ division, index }) {
   )
 }
 
-export default function About() {
+export default function About({ counts } = {}) {
   const shouldReduce = useReducedMotion()
 
-  const hkiCount = getAll('projects').length
-  const paperCount = getAll('research').length
-  const awardsCount = getAll('awards').length
+  const hkiCount = counts?.projects ?? getAll('projects').length
+  const paperCount = counts?.research ?? getAll('research').length
+  const awardsCount = counts?.awards ?? getAll('awards').length
 
   return (
     <section id="about" className="relative overflow-hidden bg-[var(--paper)] px-6 py-24 lg:px-10">

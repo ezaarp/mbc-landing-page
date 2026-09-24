@@ -7,6 +7,7 @@ import {
   Link,
   isRouteErrorResponse,
   useRouteError,
+  useLoaderData,
 } from "react-router";
 import "./index.css";
 import Nav from "./components/Nav";
@@ -14,6 +15,7 @@ import Footer from "./components/Footer";
 import FloatingThemeToggle from "./components/FloatingThemeToggle";
 import { useTheme } from "./hooks/useTheme";
 import { pageMeta } from "./lib/seo";
+import { getPublicItems } from "./lib/content";
 
 export const links = () => [
   { rel: "icon", type: "image/svg+xml", href: "/mbc-app-icon.svg" },
@@ -32,6 +34,14 @@ export const meta = () =>
       "MBC Laboratory is a student research laboratory at Telkom University, Bandung — five divisions, fifty-three assistants, turning coursework into real systems.",
     path: "/",
   });
+
+export async function loader() {
+  const events = await getPublicItems("events");
+  const recruitmentClosed = events.some(
+    (event) => event.tag === "Recruitment" && event.status === "closed",
+  );
+  return { recruitmentClosed };
+}
 
 // Prevents a flash of the wrong theme before React hydrates.
 const themeScript = `try{if(localStorage.getItem('mbc-theme')==='dark'){document.documentElement.classList.add('dark')}}catch(e){}`;
@@ -57,13 +67,16 @@ export function Layout({ children }) {
 
 export default function App() {
   const { isDark, toggle } = useTheme();
+  const data = useLoaderData();
+  const recruitmentClosed = data?.recruitmentClosed;
+
   return (
     <>
-      <Nav />
+      <Nav recruitmentClosed={recruitmentClosed} />
       <main className="min-h-screen bg-[var(--paper)] text-[var(--ink)]">
         <Outlet />
       </main>
-      <Footer />
+      <Footer recruitmentClosed={recruitmentClosed} />
       <FloatingThemeToggle isDark={isDark} onToggle={toggle} />
     </>
   );

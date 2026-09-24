@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useLoaderData, Link } from "react-router";
-import { getAll } from "../lib/content";
+import { getPublicItems } from "../lib/content";
 import { divisions } from "../data/divisions";
 import { pageMeta } from "../lib/seo";
 import DivisionFilter from "../components/DivisionFilter";
@@ -14,7 +14,8 @@ export function meta() {
 }
 
 export async function loader() {
-  return { items: getAll("research") };
+  const items = await getPublicItems("research");
+  return { items };
 }
 
 export default function Research() {

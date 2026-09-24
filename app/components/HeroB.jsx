@@ -8,12 +8,12 @@ const item = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
 }
 
-export default function HeroB() {
+export default function HeroB({ counts } = {}) {
   const shouldReduce = useReducedMotion()
 
-  const hkiCount = getAll('projects').length
-  const paperCount = getAll('research').length
-  const awardsCount = getAll('awards').length
+  const hkiCount = counts?.projects ?? getAll('projects').length
+  const paperCount = counts?.research ?? getAll('research').length
+  const awardsCount = counts?.awards ?? getAll('awards').length
   const assistantsCount = members.length
   const divisionsCount = divisions.length
 

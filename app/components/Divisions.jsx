@@ -3,12 +3,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import * as Icons from 'lucide-react'
 import { ArrowUpRight } from 'lucide-react'
 import { divisions } from '../data/divisions'
-import { getDivisionCounts } from '../lib/content'
-import { getAll } from '../lib/content'
-
-const recruitmentClosed = getAll('events').some(
-  (event) => event.tag === 'Recruitment' && event.status === 'closed',
-)
+import { getDivisionCounts, getAll } from '../lib/content'
 
 /* Live "signal" motif — an equalizer recoloured per division. */
 function Signal({ color, active }) {
@@ -112,9 +107,12 @@ function DivisionCard({ division, index, counts }) {
   )
 }
 
-export default function Divisions() {
+export default function Divisions({ divisionCounts, recruitmentClosed: rcProp } = {}) {
   const shouldReduce = useReducedMotion()
-  const counts = getDivisionCounts()
+  const counts = divisionCounts ?? getDivisionCounts()
+  const recruitmentClosed = rcProp ?? getAll('events').some(
+    (event) => event.tag === 'Recruitment' && event.status === 'closed',
+  )
 
   return (
     <section id="divisions" className="relative overflow-hidden bg-[var(--paper)] px-6 py-24 lg:px-10">

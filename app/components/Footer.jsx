@@ -8,14 +8,15 @@ const EXPLORE = [
   ['Divisions', '/#divisions'],
   ['People', '/#members'],
   ['Work', '/#work'],
+  ['Awards', '/awards'],
+  ['Blog', '/blog'],
   ['Recruitment', '/#recruit'],
 ]
 
-const recruitmentClosed = getAll('events').some(
-  (event) => event.tag === 'Recruitment' && event.status === 'closed',
-)
-
-export default function Footer() {
+export default function Footer({ recruitmentClosed: rcProp } = {}) {
+  const recruitmentClosed = rcProp ?? getAll('events').some(
+    (event) => event.tag === 'Recruitment' && event.status === 'closed',
+  )
   return (
     <footer className="relative overflow-hidden border-t border-[var(--line)] bg-[var(--surface)] px-6 pb-10 pt-16 lg:px-10">
       <div className="mx-auto max-w-page">

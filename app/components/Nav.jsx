@@ -11,13 +11,14 @@ const LINKS = [
   { href: '/#members', label: 'People' },
   { to: '/projects', label: 'Projects' },
   { to: '/research', label: 'Research' },
+  { to: '/awards', label: 'Awards' },
+  { to: '/blog', label: 'Blog' },
 ]
 
-const recruitmentClosed = getAll('events').some(
-  (event) => event.tag === 'Recruitment' && event.status === 'closed',
-)
-
-export default function Nav() {
+export default function Nav({ recruitmentClosed: rcProp } = {}) {
+  const recruitmentClosed = rcProp ?? getAll('events').some(
+    (event) => event.tag === 'Recruitment' && event.status === 'closed',
+  )
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const reduce = useReducedMotion()

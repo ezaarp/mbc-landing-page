@@ -1,19 +1,13 @@
 import { useLoaderData, Link } from "react-router";
-import { getBySlug } from "../lib/content";
+import { getPublicItemBySlug } from "../lib/content";
 import { pageMeta } from "../lib/seo";
 import Markdown from "../components/Markdown";
 import Carousel from "../components/Carousel";
 
-function load({ params }) {
-  const item = getBySlug("events", params.slug);
-  if (!item) throw new Response("Not Found", { status: 404 });
+export async function loader({ params }) {
+  const item = await getPublicItemBySlug("events", params.slug);
   return { item };
 }
-
-// `loader` prerenders real slugs at build; `clientLoader` resolves from bundled
-// content in the browser so unknown slugs (404 shell) hit the branded ErrorBoundary.
-export const loader = load;
-export const clientLoader = load;
 
 export function meta({ data, location }) {
   if (!data?.item) return [{ title: "Not found · MBC Lab" }];
